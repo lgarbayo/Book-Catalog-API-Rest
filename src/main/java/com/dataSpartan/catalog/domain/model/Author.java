@@ -1,19 +1,16 @@
 package com.dataSpartan.catalog.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
+@AllArgsConstructor
 public class Author {
-    //authorId, name, surname, birthYear
-    private Long authorId;
+    //id, name, surname, birthYear
+    private Long id;
     private String name;
     private String surname;
     private int birthYear;
-
-    public Author(Long authorId, String name, String surname, int birthYear) {
-        this.authorId = authorId;
-        this.name = name;
-        this.surname = surname;
-        this.birthYear = birthYear;
-    }
 }

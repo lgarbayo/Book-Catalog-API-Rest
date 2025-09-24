@@ -23,6 +23,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    // Endpoints
     @GetMapping
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
