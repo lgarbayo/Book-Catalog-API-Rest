@@ -13,22 +13,6 @@ import com.dataSpartan.catalog.domain.model.Book;
 public class BookRepository {
 
     // Almacenamiento en memoria usando Map<key, value> para búsquedas eficientes por ID
-
-    /*
-     * Spring Data repositories típicamente tienen:
-     * save(T entity)     Crear/actualizar
-     * findById(ID id)    Buscar por ID
-     * findAll()          Listar todos
-     * deleteById(ID id)  Eliminar
-    */
-
-    /*
-     * Operaciones CRUD básicas
-     * Create  → save()
-     * Read    → findById(), findAll()
-     * Update  → update() 
-     * Delete  → deleteById()
-     */
     
     private final Map<Long, Book> books = new HashMap<>();
     private Long nextId = 1L;
@@ -62,11 +46,4 @@ public class BookRepository {
         return books.remove(id) != null;
     }
 
-    // Método útil para buscar libros por autor (para la regla de negocio)
-    public List<Book> findBooksByAuthorId(Long authorId) {
-        return books.values().stream()
-                .filter(book -> book.getAuthors().stream()
-                        .anyMatch(author -> author.getId().equals(authorId)))
-                .toList();
-    }
 }
