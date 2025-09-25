@@ -1,3 +1,5 @@
+// forma parte de la logica de negocio
+
 package com.dataSpartan.catalog.domain.model;
 
 import java.util.List;
