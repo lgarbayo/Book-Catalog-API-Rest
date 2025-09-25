@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dataSpartan.catalog.domain.model.Book;
 import com.dataSpartan.catalog.service.BookService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/book")
+@RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
-
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
 
     // Endpoints
     @GetMapping

@@ -9,16 +9,14 @@ import com.dataSpartan.catalog.domain.model.Book;
 import com.dataSpartan.catalog.repository.AuthorRepository;
 import com.dataSpartan.catalog.repository.BookRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class AuthorServiceImplementation implements AuthorService {
     
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
-
-    public AuthorServiceImplementation(AuthorRepository authorRepository, BookRepository bookRepository) {
-        this.authorRepository = authorRepository;
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public List<Author> getAllAuthors() {

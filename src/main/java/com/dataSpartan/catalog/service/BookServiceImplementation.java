@@ -7,14 +7,13 @@ import org.springframework.stereotype.Service;
 import com.dataSpartan.catalog.domain.model.Book;
 import com.dataSpartan.catalog.repository.BookRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BookServiceImplementation implements BookService {
     
     private final BookRepository bookRepository;
-
-    public BookServiceImplementation(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public List<Book> getAllBooks() {
