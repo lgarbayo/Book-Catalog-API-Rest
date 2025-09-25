@@ -3,8 +3,12 @@
 package com.dataSpartan.catalog.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.dataSpartan.catalog.domain.model.Book;
 
+@Service
 public interface BookService {
     List<Book> getAllBooks();
     Book getBookById(Long id);
