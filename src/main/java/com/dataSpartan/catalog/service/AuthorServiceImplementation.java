@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.dataSpartan.catalog.domain.model.Author;
+import com.dataSpartan.catalog.domain.model.Book;
 import com.dataSpartan.catalog.repository.AuthorRepository;
 import com.dataSpartan.catalog.repository.BookRepository;
 
@@ -79,5 +80,20 @@ public class AuthorServiceImplementation implements AuthorService {
 
         // Important note: do not allow the removal of an author when at least one book is related to it.
         
+        // Paso 1: recuperamos todos los libros
+        List<Book> books = bookRepository.findAll();
+        
+        // Paso 2: buscar en la lista
+        for (Book book : books) {
+            List<Author> authorsInBook = book.getAuthors();
+            for (Author author : authorsInBook) {
+                if (author.getId().equals(id)) {
+                    throw new IllegalArgumentException("Cannot delete author in book: " + book.getTitle() + " with id: " + id);
+                }
+            }
+        }
+
+        // Si llegamos aquí, el autor no está en ningún libro
+        authorRepository.deleteById(id);
     }
 }
