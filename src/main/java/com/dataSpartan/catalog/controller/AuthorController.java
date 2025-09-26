@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dataSpartan.catalog.domain.model.Author;
 import com.dataSpartan.catalog.service.AuthorService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/author")
+@RequiredArgsConstructor
 public class AuthorController {
     private final AuthorService authorService;
-
-    public AuthorController(AuthorService authorService) {
-        this.authorService = authorService;
-    }
 
     // Endpoints
     @GetMapping
