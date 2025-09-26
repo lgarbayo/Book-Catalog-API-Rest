@@ -9,6 +9,7 @@ import com.dataSpartan.catalog.domain.model.Book;
 import com.dataSpartan.catalog.repository.AuthorRepository;
 import com.dataSpartan.catalog.repository.BookRepository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,7 +25,7 @@ public class AuthorServiceImplementation implements AuthorService {
     }
 
     @Override
-    public Author getAuthorById(Long id) {
+    public Author getAuthorById(@NonNull Long id) {
         Author author = authorRepository.findById(id);
         // Verificar que el autor existe
         if (author == null) {
@@ -34,13 +35,10 @@ public class AuthorServiceImplementation implements AuthorService {
     }
 
     @Override
-    public Author createAuthor(Author author) {
-        // Verificar que el autor no es nulo y tiene nombre
-        if (author == null) {
-            throw new IllegalArgumentException("Author cannot be null");
-        }
-        if (author.getName() == null || author.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Author name is required");
+    public Author createAuthor(@NonNull Author author) {
+        // Verificar que el nombre del autor no está vacío
+        if (author.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Author name cannot be empty");
         }
         
         // Asegurar que es un autor nuevo (sin ID)
@@ -49,19 +47,16 @@ public class AuthorServiceImplementation implements AuthorService {
     }
 
     @Override
-    public Author updateAuthor(Long id, Author author) {
+    public Author updateAuthor(@NonNull Long id, @NonNull Author author) {
         // Verificar que el autor existe
         Author existingAuthor = authorRepository.findById(id);
         if (existingAuthor == null) {
             throw new IllegalArgumentException("Author not found with id: " + id);
         }
 
-        // Verificar que el autor no es nulo y tiene nombre
-        if (author == null) {
-            throw new IllegalArgumentException("Author cannot be null");
-        }
-        if (author.getName() == null || author.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Author name is required");
+        // Verificar que el nombre del autor no está vacío
+        if (author.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Author name cannot be empty");
         }
 
         // Actualizar el autor en el repositorio
@@ -69,7 +64,7 @@ public class AuthorServiceImplementation implements AuthorService {
     }
 
     @Override
-    public void deleteAuthor(Long id) {
+    public void deleteAuthor(@NonNull Long id) {
         // Verificar que el autor existe
         Author existingAuthor = authorRepository.findById(id);
         if (existingAuthor == null) {

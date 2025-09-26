@@ -5,6 +5,7 @@ package com.dataSpartan.catalog.domain.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Author {
     //id, name, surname, birthYear
     private Long id;
-    private String name;
+    @NonNull private String name;
     private String surname;
     private int birthYear;
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.dataSpartan.catalog.domain.model.Book;
 import com.dataSpartan.catalog.repository.BookRepository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,7 +22,7 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public Book getBookById(Long id) {
+    public Book getBookById(@NonNull Long id) {
         Book book = bookRepository.findById(id);
         // Verificar que el libro existe
         if (book == null) {
@@ -31,13 +32,10 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public Book createBook(Book book) {
-        // Verificar que el libro no es nulo y tiene título
-        if (book == null) {
-            throw new IllegalArgumentException("Book cannot be null");
-        }
-        if (book.getTitle() == null || book.getTitle().trim().isEmpty()) {
-            throw new IllegalArgumentException("Book title is required");
+    public Book createBook(@NonNull Book book) {
+        // Verificar que el título no está vacío
+        if (book.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("Book title cannot be empty");
         }
         
         // Asegurar que es un libro nuevo (sin ID)
@@ -46,19 +44,16 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public Book updateBook(Long id, Book book) {
+    public Book updateBook(@NonNull Long id, @NonNull Book book) {
         // Verificar que el libro existe
         Book existingBook = bookRepository.findById(id);
         if (existingBook == null) {
             throw new IllegalArgumentException("Book not found with id: " + id);
         }
 
-        // Vaerificar que el libro no es nulo y tiene título
-        if (book == null) {
-            throw new IllegalArgumentException("Book cannot be null");
-        }
-        if (book.getTitle() == null || book.getTitle().trim().isEmpty()) {
-            throw new IllegalArgumentException("Book title is required");
+        // vVerificar que el título no está vacío
+        if (book.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("Book title cannot be empty");
         }
 
         // Update el libro en el repositorio
@@ -66,7 +61,7 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public void deleteBook(Long id) {
+    public void deleteBook(@NonNull Long id) {
         // Verificar que el libro existe antes de intentar eliminarlo
         Book existingBook = bookRepository.findById(id);
         if (existingBook == null) {
