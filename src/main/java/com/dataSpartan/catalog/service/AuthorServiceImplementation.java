@@ -4,14 +4,17 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.dataSpartan.catalog.domain.model.Author;
-import com.dataSpartan.catalog.domain.model.Book;
+import com.dataSpartan.catalog.domain.author.Author;
+import com.dataSpartan.catalog.domain.book.Book;
+import com.dataSpartan.catalog.exception.ResourceNotFoundException;
 import com.dataSpartan.catalog.repository.AuthorRepository;
 import com.dataSpartan.catalog.repository.BookRepository;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImplementation implements AuthorService {
@@ -21,72 +24,113 @@ public class AuthorServiceImplementation implements AuthorService {
 
     @Override
     public List<Author> getAllAuthors() {
+        log.debug("Fetching all authors. Total count: {}", authorRepository.findAll().size());
         return authorRepository.findAll();
     }
 
     @Override
     public Author getAuthorById(@NonNull Long id) {
+        log.debug("Fetching author with ID: {}", id);
         Author author = authorRepository.findById(id);
-        // Verificar que el autor existe
         if (author == null) {
-            throw new IllegalArgumentException("Author not found with id: " + id);
+            log.warn("Author not found with ID: {}", id);
+            throw new ResourceNotFoundException("Author not found with id: " + id);
         }
+        log.debug("Author found: {}", author.getName());
         return author;
     }
 
     @Override
     public Author createAuthor(@NonNull Author author) {
-        // Verificar que el nombre del autor no está vacío
-        if (author.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Author name cannot be empty");
+        log.info("Creating new author with name: {}", author.getName());
+        log.debug("Author details: surname: {}, birthYear: {}", author.getSurname(), author.getBirthYear());
+        
+        // Validacion del nombre
+        if (author.getName() == null || author.getName().trim().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
+            log.warn("Attempt to create author with null or empty name");
+            // sin la validacion de == null salta error 500
+            throw new IllegalArgumentException("Name is required and cannot be empty");
         }
         
         // Asegurar que es un autor nuevo (sin ID)
+        log.debug("Setting author ID to null for new creation");
         author.setId(null);
-        return authorRepository.save(author);
+        
+        // Guardar en repositorio
+        Author savedAuthor = authorRepository.save(author);
+        log.info("Successfully created author with ID: {}", savedAuthor.getId());
+        log.debug("Saved author details: name: {}, surname: {}, birthYear: {}", 
+                 savedAuthor.getName(), savedAuthor.getSurname(), savedAuthor.getBirthYear());
+        
+        return savedAuthor;
     }
 
     @Override
     public Author updateAuthor(@NonNull Long id, @NonNull Author author) {
+        log.info("Updating author with ID: {}", id);
+        log.debug("Update request details: name: {}, surname: {}, birthYear: {}", 
+                 author.getName(), author.getSurname(), author.getBirthYear());
+        
         // Verificar que el autor existe
         Author existingAuthor = authorRepository.findById(id);
         if (existingAuthor == null) {
-            throw new IllegalArgumentException("Author not found with id: " + id);
+            log.warn("Attempt to update non-existent author with ID: {}", id);
+            throw new ResourceNotFoundException("Author not found with id: " + id);
         }
+        
+        log.debug("Found existing author: name: {}, surname: {}", 
+                 existingAuthor.getName(), existingAuthor.getSurname());
 
-        // Verificar que el nombre del autor no está vacío
-        if (author.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Author name cannot be empty");
+        // Validacion del nombre
+        if (author.getName() == null || author.getName().trim().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
+            log.warn("Attempt to update author {} with null or empty name", id);
+            // sin la validacion de == null salta error 500
+            throw new IllegalArgumentException("Name is required and cannot be empty");
         }
-
+        
         // Actualizar el autor en el repositorio
+        log.info("Successfully updated author with ID: {}", id);
+        log.debug("Updated author details: name: {}, surname: {}, birthYear: {}", 
+                 authorRepository.update(id, author).getName(), authorRepository.update(id, author).getSurname(), authorRepository.update(id, author).getBirthYear());
         return authorRepository.update(id, author);
     }
 
     @Override
     public void deleteAuthor(@NonNull Long id) {
+        log.info("Attempting to delete author with ID: {}", id);
+        
         // Verificar que el autor existe
         Author existingAuthor = authorRepository.findById(id);
         if (existingAuthor == null) {
-            throw new IllegalArgumentException("Author not found with id: " + id);
+            log.warn("Attempt to delete non-existent author with ID: {}", id);
+            throw new ResourceNotFoundException("Author not found with id: " + id);
         }
+        
+        log.debug("Found author to delete: name: {}, surname: {}", 
+                 existingAuthor.getName(), existingAuthor.getSurname());
 
         // Important note: do not allow the removal of an author when at least one book is related to it.
+        log.debug("Checking if author {} is referenced in any books", id);
         
         // Paso 1: recuperamos todos los libros
         List<Book> books = bookRepository.findAll();
+        log.debug("Checking {} books for references to author {}", books.size(), id);
         
         // Paso 2: buscar en la lista
         for (Book book : books) {
             List<Author> authorsInBook = book.getAuthors();
             for (Author author : authorsInBook) {
                 if (author.getId().equals(id)) {
+                    log.warn("Cannot delete author {} - referenced in book: {} (ID: {})", 
+                            id, book.getTitle(), book.getId());
                     throw new IllegalArgumentException("Cannot delete author in book: " + book.getTitle() + " with id: " + id);
                 }
             }
         }
 
         // Si llegamos aquí, el autor no está en ningún libro
+        log.debug("Author {} is not referenced in any books, proceeding with deletion", id);
         authorRepository.deleteById(id);
+        log.info("Successfully deleted author with ID: {}", id);
     }
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.dataSpartan.catalog.domain.model.Author;
+import com.dataSpartan.catalog.domain.author.Author;
 
 @Repository
 public class AuthorRepository {

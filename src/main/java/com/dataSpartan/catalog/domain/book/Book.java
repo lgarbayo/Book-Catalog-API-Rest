@@ -1,8 +1,10 @@
 // forma parte de la logica de negocio
 
-package com.dataSpartan.catalog.domain.model;
+package com.dataSpartan.catalog.domain.book;
 
 import java.util.List;
+
+import com.dataSpartan.catalog.domain.author.Author;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.dataSpartan.catalog.domain.model.Book;
+import com.dataSpartan.catalog.domain.book.Book;
 
 @Repository
 public class BookRepository {

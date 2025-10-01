@@ -1,6 +1,6 @@
 // forma parte de la logica de negocio
 
-package com.dataSpartan.catalog.domain.model;
+package com.dataSpartan.catalog.domain.author;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

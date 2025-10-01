@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.dataSpartan.catalog.domain.model.Author;
+import com.dataSpartan.catalog.domain.author.Author;
 
 @Service
 public interface AuthorService {
