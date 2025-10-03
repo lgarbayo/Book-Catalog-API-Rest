@@ -1,4 +1,4 @@
-//Puerto(interface): DEFINE CÓMO INTERACTUAR CON EL DOMINIO, es decir, lo que se puede hacer desde fuera
+//Puerto de entrada(interface): DEFINE CÓMO INTERACTUAR CON EL DOMINIO, es decir, lo que se puede hacer desde fuera
 
 package com.dataspartan.catalog.domain.book;
 

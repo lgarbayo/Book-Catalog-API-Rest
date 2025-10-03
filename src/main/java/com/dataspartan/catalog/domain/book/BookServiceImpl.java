@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.dataspartan.catalog.exception.ResourceNotFoundException;
-import com.dataspartan.catalog.repository.BookRepository;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +38,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book createBook(@NonNull Book book) {
         log.info("Creating new book with title: {}", book.getTitle());
-        log.debug("Book details: authors count: {}, publisher: {}", 
-                  book.getAuthors() != null ? book.getAuthors().size() : 0, book.getPublisher());
-        
+        log.debug("Book details: author IDs count: {}, publisher: {}",
+                  book.getAuthorIds() != null ? book.getAuthorIds().size() : 0, book.getPublisher());
+
         // Validacion del título
         if (book.getTitle() == null || book.getTitle().trim().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to create book with null or empty title");
@@ -50,7 +49,7 @@ public class BookServiceImpl implements BookService {
         }
         
         // Validacion de autores
-        if (book.getAuthors() == null || book.getAuthors().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
+        if (book.getAuthorIds() == null || book.getAuthorIds().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to create book without authors");
             // sin la validacion de == null salta error 500
             throw new IllegalArgumentException("At least one author is required");
@@ -65,9 +64,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book updateBook(@NonNull Long id, @NonNull Book book) {
         log.info("Updating book with ID: {}", id);
-        log.debug("Updated book details: title: {}, authors count: {}", 
-                  book.getTitle(), book.getAuthors() != null ? book.getAuthors().size() : 0);
-        
+        log.debug("Updated book details: title: {}, author IDs count: {}",
+                  book.getTitle(), book.getAuthorIds() != null ? book.getAuthorIds().size() : 0);
+
         // Verificar que el libro existe
         Book existingBook = bookRepository.findById(id);
         if (existingBook == null) {
@@ -83,7 +82,7 @@ public class BookServiceImpl implements BookService {
         }
         
         // Validacion de autores
-        if (book.getAuthors() == null || book.getAuthors().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
+        if (book.getAuthorIds() == null || book.getAuthorIds().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to update book without authors");
             // sin la validacion de == null salta error 500
             throw new IllegalArgumentException("At least one author is required");

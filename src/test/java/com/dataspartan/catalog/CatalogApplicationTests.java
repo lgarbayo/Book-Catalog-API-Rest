@@ -1,4 +1,4 @@
-package com.dataSpartan.catalog;
+package com.dataspartan.catalog;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

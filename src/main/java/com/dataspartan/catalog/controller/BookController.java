@@ -44,9 +44,9 @@ public class BookController {
     @PostMapping
     public Book createBook(@RequestBody Book book) {
         log.info("POST /book - Creating new book with title: {}", book.getTitle());
-        log.debug("Book creation request: publisher: {}, edition: {}, authors count: {}", 
-                 book.getPublisher(), book.getEdition(), 
-                 book.getAuthors() != null ? book.getAuthors().size() : 0);
+        log.debug("Book creation request: publisher: {}, edition: {}, author IDs count: {}",
+                 book.getPublisher(), book.getEdition(),
+                 book.getAuthorIds() != null ? book.getAuthorIds().size() : 0);
         Book createdBook = bookService.createBook(book);
         log.info("Successfully created book with ID: {}", createdBook.getId());
         return createdBook;

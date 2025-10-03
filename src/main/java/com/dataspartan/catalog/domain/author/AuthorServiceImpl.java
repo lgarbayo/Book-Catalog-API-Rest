@@ -5,9 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.dataspartan.catalog.domain.book.Book;
+import com.dataspartan.catalog.domain.book.BookRepository;
 import com.dataspartan.catalog.exception.ResourceNotFoundException;
-import com.dataspartan.catalog.repository.AuthorRepository;
-import com.dataspartan.catalog.repository.BookRepository;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -115,15 +114,13 @@ public class AuthorServiceImpl implements AuthorService {
         List<Book> books = bookRepository.findAll();
         log.debug("Checking {} books for references to author {}", books.size(), id);
         
-        // Paso 2: buscar en la lista
+        // Paso 2: buscar en la lista de IDs de autores
         for (Book book : books) {
-            List<Author> authorsInBook = book.getAuthors();
-            for (Author author : authorsInBook) {
-                if (author.getId().equals(id)) {
-                    log.warn("Cannot delete author {} - referenced in book: {} (ID: {})", 
-                            id, book.getTitle(), book.getId());
-                    throw new IllegalArgumentException("Cannot delete author in book: " + book.getTitle() + " with id: " + id);
-                }
+            List<Long> authorIdsInBook = book.getAuthorIds();
+            if (authorIdsInBook.contains(id)) {
+                log.warn("Cannot delete author {} - referenced in book: {} (ID: {})",
+                        id, book.getTitle(), book.getId());
+                throw new IllegalArgumentException("Cannot delete author in book: " + book.getTitle() + " with id: " + id);
             }
         }
 
