@@ -15,12 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
     // Error 400 "Bad Request"
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequest(IllegalArgumentException ex, WebRequest request) {
+    @ExceptionHandler(InvalidArgumentsException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequest(InvalidArgumentsException ex, WebRequest request) {
         
         String requestPath = request.getDescription(false).replace("uri=", "");
         log.warn("Bad request error on {}: {}", requestPath, ex.getMessage());
-        log.debug("IllegalArgumentException details", ex);
+        log.debug("InvalidArgumentsException details", ex);
         
         ErrorResponse errorResponse = new ErrorResponse(
             400,

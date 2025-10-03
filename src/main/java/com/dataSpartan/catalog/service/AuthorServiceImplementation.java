@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.dataSpartan.catalog.domain.author.Author;
 import com.dataSpartan.catalog.domain.book.Book;
+import com.dataSpartan.catalog.exception.InvalidArgumentsException;
 import com.dataSpartan.catalog.exception.ResourceNotFoundException;
 import com.dataSpartan.catalog.repository.AuthorRepository;
 import com.dataSpartan.catalog.repository.BookRepository;
@@ -49,7 +50,7 @@ public class AuthorServiceImplementation implements AuthorService {
         if (author.getName() == null || author.getName().trim().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to create author with null or empty name");
             // sin la validacion de == null salta error 500
-            throw new IllegalArgumentException("Name is required and cannot be empty");
+            throw new InvalidArgumentsException("Name is required and cannot be empty");
         }
         
         // Asegurar que es un autor nuevo (sin ID)
@@ -85,7 +86,7 @@ public class AuthorServiceImplementation implements AuthorService {
         if (author.getName() == null || author.getName().trim().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to update author {} with null or empty name", id);
             // sin la validacion de == null salta error 500
-            throw new IllegalArgumentException("Name is required and cannot be empty");
+            throw new InvalidArgumentsException("Name is required and cannot be empty");
         }
         
         // Actualizar el autor en el repositorio
@@ -123,7 +124,7 @@ public class AuthorServiceImplementation implements AuthorService {
                 if (author.getId().equals(id)) {
                     log.warn("Cannot delete author {} - referenced in book: {} (ID: {})", 
                             id, book.getTitle(), book.getId());
-                    throw new IllegalArgumentException("Cannot delete author in book: " + book.getTitle() + " with id: " + id);
+                    throw new InvalidArgumentsException("Cannot delete author in book: " + book.getTitle() + " with id: " + id);
                 }
             }
         }
