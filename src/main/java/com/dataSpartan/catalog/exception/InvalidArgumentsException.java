@@ -1,6 +1,6 @@
 package com.dataSpartan.catalog.exception;
 
-public class InvalidArgumentsException extends RuntimeException {
+public class InvalidArgumentsException extends CatalogException {
 
   private static final long serialVersionUID = -5400412368947993168L;
 

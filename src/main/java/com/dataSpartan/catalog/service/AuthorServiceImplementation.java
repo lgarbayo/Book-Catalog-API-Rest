@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.dataSpartan.catalog.domain.author.Author;
 import com.dataSpartan.catalog.domain.book.Book;
 import com.dataSpartan.catalog.exception.InvalidArgumentsException;
+import com.dataSpartan.catalog.exception.PreconditionFailedException;
 import com.dataSpartan.catalog.exception.ResourceNotFoundException;
 import com.dataSpartan.catalog.repository.AuthorRepository;
 import com.dataSpartan.catalog.repository.BookRepository;
@@ -124,7 +125,7 @@ public class AuthorServiceImplementation implements AuthorService {
                 if (author.getId().equals(id)) {
                     log.warn("Cannot delete author {} - referenced in book: {} (ID: {})", 
                             id, book.getTitle(), book.getId());
-                    throw new InvalidArgumentsException("Cannot delete author in book: " + book.getTitle() + " with id: " + id);
+                    throw new PreconditionFailedException("Cannot delete author in book: " + book.getTitle() + " with id: " + id);
                 }
             }
         }

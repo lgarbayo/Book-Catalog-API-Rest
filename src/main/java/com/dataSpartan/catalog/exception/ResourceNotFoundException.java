@@ -1,6 +1,6 @@
 package com.dataSpartan.catalog.exception;
 
-public class ResourceNotFoundException extends RuntimeException {
+public class ResourceNotFoundException extends CatalogException {
 
   private static final long serialVersionUID = -4514622944900924144L;
 
