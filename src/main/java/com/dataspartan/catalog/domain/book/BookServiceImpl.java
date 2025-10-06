@@ -2,9 +2,9 @@ package com.dataspartan.catalog.domain.book;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
+import com.dataspartan.catalog.exception.InvalidArgumentsException;
 import com.dataspartan.catalog.exception.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -45,14 +45,14 @@ public class BookServiceImpl implements BookService {
         if (book.getTitle() == null || book.getTitle().trim().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to create book with null or empty title");
             // sin la validacion de == null salta error 500
-            throw new IllegalArgumentException("Title is required and cannot be empty");
+            throw new InvalidArgumentsException("Title is required and cannot be empty");
         }
         
         // Validacion de autores
         if (book.getAuthorIds() == null || book.getAuthorIds().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to create book without authors");
             // sin la validacion de == null salta error 500
-            throw new IllegalArgumentException("At least one author is required");
+            throw new InvalidArgumentsException("At least one author is required");
         }
         
         // Asegurar que es un libro nuevo (sin ID)
@@ -78,14 +78,14 @@ public class BookServiceImpl implements BookService {
         if (book.getTitle() == null || book.getTitle().trim().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to update book with null or empty title");
             // sin la validacion de == null salta error 500
-            throw new IllegalArgumentException("Title is required and cannot be empty");
+            throw new InvalidArgumentsException("Title is required and cannot be empty");
         }
         
         // Validacion de autores
         if (book.getAuthorIds() == null || book.getAuthorIds().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to update book without authors");
             // sin la validacion de == null salta error 500
-            throw new IllegalArgumentException("At least one author is required");
+            throw new InvalidArgumentsException("At least one author is required");
         }
 
         // Update el libro en el repositorio
@@ -112,4 +112,13 @@ public class BookServiceImpl implements BookService {
         
         log.info("Book deleted successfully with ID: {}", id);
     }
+
+    @Override
+    public List<Book> findBooksByAuthorId(Long authorId) {
+        log.debug("Finding books by author ID: {}", authorId);
+        List<Book> books = bookRepository.findByAuthorsId(authorId);
+        log.debug("Found {} books for author ID: {}", books.size(), authorId);
+        return books;
+    }
+
 }

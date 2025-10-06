@@ -2,11 +2,10 @@ package com.dataspartan.catalog.domain.author;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-import com.dataspartan.catalog.domain.book.Book;
-import com.dataspartan.catalog.domain.book.BookRepository;
+import com.dataspartan.catalog.exception.InvalidArgumentsException;
+import com.dataspartan.catalog.exception.PreconditionFailedException;
 import com.dataspartan.catalog.exception.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthorServiceImpl implements AuthorService {
     
     private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository;
 
     @Override
     public List<Author> getAllAuthors() {
@@ -47,7 +45,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (author.getName() == null || author.getName().trim().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to create author with null or empty name");
             // sin la validacion de == null salta error 500
-            throw new IllegalArgumentException("Name is required and cannot be empty");
+            throw new InvalidArgumentsException("Name is required and cannot be empty");
         }
         
         // Asegurar que es un autor nuevo (sin ID)
@@ -83,7 +81,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (author.getName() == null || author.getName().trim().isEmpty()) { // Validacion necesaria ya que @NonNull no lo garantiza en deserialización JSON
             log.warn("Attempt to update author {} with null or empty name", id);
             // sin la validacion de == null salta error 500
-            throw new IllegalArgumentException("Name is required and cannot be empty");
+            throw new InvalidArgumentsException("Name is required and cannot be empty");
         }
         
         // Actualizar el autor en el repositorio
@@ -107,26 +105,14 @@ public class AuthorServiceImpl implements AuthorService {
         log.debug("Found author to delete: name: {}, surname: {}", 
                  existingAuthor.getName(), existingAuthor.getSurname());
 
-        // Important note: do not allow the removal of an author when at least one book is related to it.
-        log.debug("Checking if author {} is referenced in any books", id);
-        
-        // Paso 1: recuperamos todos los libros
-        List<Book> books = bookRepository.findAll();
-        log.debug("Checking {} books for references to author {}", books.size(), id);
-        
-        // Paso 2: buscar en la lista de IDs de autores
-        for (Book book : books) {
-            List<Long> authorIdsInBook = book.getAuthorIds();
-            if (authorIdsInBook.contains(id)) {
-                log.warn("Cannot delete author {} - referenced in book: {} (ID: {})",
-                        id, book.getTitle(), book.getId());
-                throw new IllegalArgumentException("Cannot delete author in book: " + book.getTitle() + " with id: " + id);
-            }
+        log.debug("Proceeding with author deletion (referential integrity checked at Facade layer)");
+        boolean deleted = authorRepository.deleteById(id);
+
+        if (!deleted) {
+            log.error("Failed to delete author with ID: {}", id);
+            throw new PreconditionFailedException("Failed to delete author with id: " + id);
         }
 
-        // Si llegamos aquí, el autor no está en ningún libro
-        log.debug("Author {} is not referenced in any books, proceeding with deletion", id);
-        authorRepository.deleteById(id);
         log.info("Successfully deleted author with ID: {}", id);
     }
 }

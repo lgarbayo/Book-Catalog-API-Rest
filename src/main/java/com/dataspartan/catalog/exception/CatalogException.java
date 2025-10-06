@@ -1,4 +1,4 @@
-package com.dataSpartan.catalog.exception;
+package com.dataspartan.catalog.exception;
 
 public class CatalogException extends RuntimeException {
 
@@ -22,5 +22,4 @@ public class CatalogException extends RuntimeException {
     public CatalogException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-
 }

@@ -51,4 +51,16 @@ public class BookRepositoryImpl implements BookRepository {
     public boolean deleteById(Long id) {
         return books.remove(id) != null;
     }
+
+    @Override
+    public List<Book> findByAuthorsId(Long authorId) {
+        List<Book> result = new ArrayList<>();
+        for (Book book : books.values()) {
+            if (book.getAuthorIds().contains(authorId)) {  // Usar contains() en la lista
+                result.add(book);
+            }
+        }
+
+        return result;
+    }
 }

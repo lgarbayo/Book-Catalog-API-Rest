@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dataspartan.catalog.domain.author.Author;
 import com.dataspartan.catalog.domain.author.AuthorService;
+import com.dataspartan.catalog.domain.facade.AuthorFacadeImpl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthorController {
     private final AuthorService authorService;
+    private final AuthorFacadeImpl authorFacade;
 
     // Endpoints
     @GetMapping
@@ -63,7 +65,7 @@ public class AuthorController {
     @DeleteMapping("/{id}")
     public void deleteAuthor(@PathVariable Long id) {
         log.info("DELETE /author/{} - Deleting author", id);
-        authorService.deleteAuthor(id);
+        authorFacade.deleteAuthor(id);
         log.info("Successfully deleted author with ID: {}", id);
     }
     

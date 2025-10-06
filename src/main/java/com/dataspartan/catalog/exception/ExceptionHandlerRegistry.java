@@ -1,4 +1,4 @@
-package com.dataSpartan.catalog.exception;
+package com.dataspartan.catalog.exception;
 
 import java.time.LocalDateTime;
 import java.util.Map;

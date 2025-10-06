@@ -13,4 +13,5 @@ public interface BookService {
     Book createBook(Book book);
     Book updateBook(Long id, Book book);
     void deleteBook(Long id);
+    List<Book> findBooksByAuthorId(Long authorId);
 }
