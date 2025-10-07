@@ -1,5 +1,3 @@
-//Puerto de salida
-
 package com.dataspartan.catalog.domain.author;
 
 import java.util.List;

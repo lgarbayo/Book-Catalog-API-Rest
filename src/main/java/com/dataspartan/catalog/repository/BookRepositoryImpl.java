@@ -54,9 +54,13 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findByAuthorsId(Long authorId) {
+        if (authorId == null) {
+            return new ArrayList<>();
+        }
+
         List<Book> result = new ArrayList<>();
         for (Book book : books.values()) {
-            if (book.getAuthorIds().contains(authorId)) {  // Usar contains() en la lista
+            if (book.getAuthorIds().contains(authorId)) {
                 result.add(book);
             }
         }

@@ -39,15 +39,14 @@ public class AuthorController {
     public Author getAuthorById(@PathVariable Long id) {
         log.info("GET /author/{} - Retrieving author by ID", id);
         Author author = authorService.getAuthorById(id);
-        log.debug("Retrieved author: name: {}, surname: {}", author.getName(), author.getSurname());
+        authorService.logAuthorDetails("Retrieved author", author);
         return author;
     }
 
     @PostMapping
     public Author createAuthor(@RequestBody Author author) {
         log.info("POST /author - Creating new author with name: {}", author.getName());
-        log.debug("Author creation request: surname: {}, birthYear: {}", 
-                 author.getSurname(), author.getBirthYear());
+        authorService.logAuthorDetails("Author creation request", author);
         Author createdAuthor = authorService.createAuthor(author);
         log.info("Successfully created author with ID: {}", createdAuthor.getId());
         return createdAuthor;
@@ -56,7 +55,7 @@ public class AuthorController {
     @PutMapping("/{id}")
     public Author updateAuthor(@PathVariable Long id, @RequestBody Author author) {
         log.info("PUT /author/{} - Updating author", id);
-        log.debug("Author update request: name: {}, surname: {}", author.getName(), author.getSurname());
+        authorService.logAuthorDetails("Author update request", author);
         Author updatedAuthor = authorService.updateAuthor(id, author);
         log.info("Successfully updated author with ID: {}", id);
         return updatedAuthor;

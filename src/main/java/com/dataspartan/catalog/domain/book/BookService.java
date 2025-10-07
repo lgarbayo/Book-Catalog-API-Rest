@@ -1,5 +1,3 @@
-//Puerto de entrada(interface): DEFINE CÓMO INTERACTUAR CON EL DOMINIO, es decir, lo que se puede hacer desde fuera
-
 package com.dataspartan.catalog.domain.book;
 
 import java.util.List;
@@ -14,4 +12,5 @@ public interface BookService {
     Book updateBook(Long id, Book book);
     void deleteBook(Long id);
     List<Book> findBooksByAuthorId(Long authorId);
+    void logBookDetails(String prefix, Book book); // añadido para centralizar el logging de detalles
 }

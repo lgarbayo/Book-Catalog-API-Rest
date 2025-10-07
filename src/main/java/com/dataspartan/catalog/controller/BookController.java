@@ -37,16 +37,14 @@ public class BookController {
     public Book getBookById(@PathVariable Long id) {
         log.info("GET /book/{} - Retrieving book by ID", id);
         Book book = bookService.getBookById(id);
-        log.debug("Retrieved book: title: {}, publisher: {}", book.getTitle(), book.getPublisher());
+        bookService.logBookDetails("Retrieved book", book);
         return book;
     }
 
     @PostMapping
     public Book createBook(@RequestBody Book book) {
         log.info("POST /book - Creating new book with title: {}", book.getTitle());
-        log.debug("Book creation request: publisher: {}, edition: {}, author IDs count: {}",
-                 book.getPublisher(), book.getEdition(),
-                 book.getAuthorIds() != null ? book.getAuthorIds().size() : 0);
+        bookService.logBookDetails("Book creation request", book);
         Book createdBook = bookService.createBook(book);
         log.info("Successfully created book with ID: {}", createdBook.getId());
         return createdBook;
@@ -55,7 +53,7 @@ public class BookController {
     @PutMapping("/{id}")
     public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
         log.info("PUT /book/{} - Updating book", id);
-        log.debug("Book update request: title: {}, publisher: {}", book.getTitle(), book.getPublisher());
+        bookService.logBookDetails("Book update request", book);
         Book updatedBook = bookService.updateBook(id, book);
         log.info("Successfully updated book with ID: {}", id);
         return updatedBook;

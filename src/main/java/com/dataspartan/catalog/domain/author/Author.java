@@ -1,5 +1,3 @@
-// forma parte de la logica de negocio
-
 package com.dataspartan.catalog.domain.author;
 
 import lombok.AllArgsConstructor;
@@ -7,13 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Author {
-    //id, name, surname, birthYear
     private Long id;
-    @NonNull private String name;
-    private String surname;
-    private int birthYear;
+    @NonNull private String name; // name no puede ser null
+    private String surname; // puede ser null
+    private String nationality; // puede ser null
+
+    // para formato de fechas se acepta el formato ISO 8601 (YYYY-MM-DD) (./resources/application.properties)
+    private LocalDate birthDate;
+    private LocalDate deathDate;
+    private String biography; // puede ser null
 }
