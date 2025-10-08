@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +22,10 @@ public class Author {
     private LocalDate birthDate;
     private LocalDate deathDate;
     private String biography; // puede ser null
+
+    // seudonimos
+    private List<String> pseudonyms = new ArrayList<>();
+
+    // info contacto
+    private List<ContactInfo> contactInfo = new ArrayList<>();
 }

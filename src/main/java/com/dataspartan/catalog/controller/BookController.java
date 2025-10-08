@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dataspartan.catalog.domain.book.Book;
 import com.dataspartan.catalog.domain.book.BookService;
+import com.dataspartan.catalog.domain.book.Edition;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BookController {
     private final BookService bookService;
 
-    // Endpoints
+    // Book CRUD endpoints
     @GetMapping
     public List<Book> getAllBooks() {
         log.info("GET /book - Retrieving all books");
@@ -65,5 +66,35 @@ public class BookController {
         bookService.deleteBook(id);
         log.info("Successfully deleted book with ID: {}", id);
     }
-    
+
+    // Edition CRUD endpoints
+    @PostMapping("/{bookId}/edition")
+    public Edition addEditionToBook(@PathVariable Long bookId, @RequestBody Edition edition) {
+        log.info("POST /book/{}/editions - Adding edition to book", bookId);
+        return bookService.addEditionToBook(bookId, edition);
+    }
+
+    @GetMapping("/{bookId}/edition")
+    public List<Edition> getAllEditionsFromBook(@PathVariable Long bookId) {
+        log.info("GET /book/{}/editions - Retrieving all editions from book", bookId);
+        return bookService.getAllEditionsFromBook(bookId);
+    }
+
+    @GetMapping("/{bookId}/edition/{editionIndex}")
+    public Edition getEdition(@PathVariable Long bookId, @PathVariable int editionIndex) {
+        log.info("GET /book/{}/editions/{} - Retrieving edition", bookId, editionIndex);
+        return bookService.getEdition(bookId, editionIndex);
+    }
+
+    @PutMapping("/{bookId}/edition/{editionIndex}")
+    public Edition updateEdition(@PathVariable Long bookId, @PathVariable int editionIndex, @RequestBody Edition edition) {
+        log.info("PUT /book/{}/editions/{} - Updating edition", bookId, editionIndex);
+        return bookService.updateEdition(bookId, editionIndex, edition);
+    }
+
+    @DeleteMapping("/{bookId}/edition/{editionIndex}")
+    public void deleteEdition(@PathVariable Long bookId, @PathVariable int editionIndex) {
+        log.info("DELETE /book/{}/editions/{} - Deleting edition", bookId, editionIndex);
+        bookService.deleteEdition(bookId, editionIndex);
+    }
 }

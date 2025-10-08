@@ -12,5 +12,12 @@ public interface BookService {
     Book updateBook(Long id, Book book);
     void deleteBook(Long id);
     List<Book> findBooksByAuthorId(Long authorId);
-    void logBookDetails(String prefix, Book book); // añadido para centralizar el logging de detalles
+    void logBookDetails(String prefix, Book book);
+
+    // CRUD operations for editions
+    Edition addEditionToBook(Long bookId, Edition edition);
+    Edition updateEdition(Long bookId, int editionIndex, Edition edition);
+    void deleteEdition(Long bookId, int editionIndex);
+    Edition getEdition(Long bookId, int editionIndex);
+    List<Edition> getAllEditionsFromBook(Long bookId);
 }

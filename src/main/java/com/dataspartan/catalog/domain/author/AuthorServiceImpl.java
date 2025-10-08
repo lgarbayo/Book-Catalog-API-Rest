@@ -1,5 +1,6 @@
 package com.dataspartan.catalog.domain.author;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dataspartan.catalog.exception.InvalidArgumentsException;
@@ -97,6 +98,97 @@ public class AuthorServiceImpl implements AuthorService {
         log.info("Successfully deleted author with ID: {}", id);
     }
 
+    // CRUD operations for nested ContactInfo elements
+    @Override
+    public ContactInfo addContactInfoToAuthor(@NonNull Long authorId, @NonNull ContactInfo contactInfo) {
+        log.info("Adding contact info to author with ID: {}", authorId);
+        Author author = getAuthorById(authorId);
+
+        if (author.getContactInfo() == null) {
+            author.setContactInfo(new ArrayList<>());
+        }
+
+        author.getContactInfo().add(contactInfo);
+        authorRepository.update(authorId, author);
+        log.info("Successfully added contact info to author: {}", authorId);
+        return contactInfo;
+    }
+
+    @Override
+    public ContactInfo updateContactInfo(@NonNull Long authorId, int contactIndex, @NonNull ContactInfo contactInfo) {
+        log.info("Updating contact info at index {} for author {}", contactIndex, authorId);
+        Author author = getAuthorById(authorId);
+
+        if (author.getContactInfo() == null) {
+            log.warn("Contact info list is null for author: {}", authorId);
+            throw new ResourceNotFoundException("Contact info list is not initialized for author: " + authorId);
+        }
+        if (contactIndex < 0) {
+            log.warn("Negative contact info index: {} for author: {}", contactIndex, authorId);
+            throw new InvalidArgumentsException("Contact info index cannot be negative: " + contactIndex);
+        }
+        if (contactIndex >= author.getContactInfo().size()) {
+            log.warn("Contact info index out of bounds: {} for author: {}", contactIndex, authorId);
+            throw new InvalidArgumentsException("Contact info index out of bounds: " + contactIndex);
+        }
+
+        author.getContactInfo().set(contactIndex, contactInfo);
+        authorRepository.update(authorId, author);
+        log.info("Successfully updated contact info at index: {}", contactIndex);
+        return contactInfo;
+    }
+
+    @Override
+    public void deleteContactInfo(@NonNull Long authorId, int contactIndex) {
+        log.info("Deleting contact info at index {} from author {}", contactIndex, authorId);
+        Author author = getAuthorById(authorId);
+
+        if (author.getContactInfo() == null) {
+            log.warn("Contact info list is null for author: {}", authorId);
+            throw new ResourceNotFoundException("Contact info list is not initialized for author: " + authorId);
+        }
+        if (contactIndex < 0) {
+            log.warn("Negative contact info index: {} for author: {}", contactIndex, authorId);
+            throw new InvalidArgumentsException("Contact info index cannot be negative: " + contactIndex);
+        }
+        if (contactIndex >= author.getContactInfo().size()) {
+            log.warn("Contact info index out of bounds: {} for author: {}", contactIndex, authorId);
+            throw new InvalidArgumentsException("Contact info index out of bounds: " + contactIndex);
+        }
+
+        author.getContactInfo().remove(contactIndex);
+        authorRepository.update(authorId, author);
+        log.info("Successfully deleted contact info at index: {}", contactIndex);
+    }
+
+    @Override
+    public ContactInfo getContactInfo(@NonNull Long authorId, int contactIndex) {
+        log.debug("Fetching contact info at index {} from author {}", contactIndex, authorId);
+        Author author = getAuthorById(authorId);
+
+        if (author.getContactInfo() == null) {
+            log.warn("Contact info list is null for author: {}", authorId);
+            throw new ResourceNotFoundException("Contact info list is not initialized for author: " + authorId);
+        }
+        if (contactIndex < 0) {
+            log.warn("Negative contact info index: {} for author: {}", contactIndex, authorId);
+            throw new InvalidArgumentsException("Contact info index cannot be negative: " + contactIndex);
+        }
+        if (contactIndex >= author.getContactInfo().size()) {
+            log.warn("Contact info index out of bounds: {} for author: {}", contactIndex, authorId);
+            throw new InvalidArgumentsException("Contact info index out of bounds: " + contactIndex);
+        }
+
+        return author.getContactInfo().get(contactIndex);
+    }
+
+    @Override
+    public List<ContactInfo> getAllContactInfoFromAuthor(@NonNull Long authorId) {
+        log.debug("Fetching all contact info from author {}", authorId);
+        Author author = getAuthorById(authorId);
+        return author.getContactInfo() != null ? author.getContactInfo() : new ArrayList<>();
+    }
+
     private void validateAuthor(Author author) {
         // Validacion del nombre
         if (author.getName() == null || author.getName().trim().isEmpty()) {
@@ -124,14 +216,16 @@ public class AuthorServiceImpl implements AuthorService {
 
     public void logAuthorDetails(String prefix, Author author) {
         if (log.isDebugEnabled()) {
-            log.debug("{}: name: {}, surname: {}, nationality: {}, birthDate: {}, deathDate: {}, biography: {}",
+            log.debug("{}: name: {}, surname: {}, nationality: {}, birthDate: {}, deathDate: {}, biography: {}, pseudonyms: {}, contactInfo: {}",
                     prefix, // Texto del log
                     author.getName(),
                     author.getSurname() != null ? author.getSurname() : "No surname",
                     author.getNationality() != null ? author.getNationality() : "Unknown nationality",
                     author.getBirthDate() != null ? author.getBirthDate() : "Unknown birth date",
                     author.getDeathDate() != null ? author.getDeathDate() : "Unknown death date",
-                    author.getBiography() != null ? author.getBiography() : "No biography");
+                    author.getBiography() != null ? author.getBiography() : "No biography",
+                    author.getPseudonyms() != null ? author.getPseudonyms() : "No pseudonyms",
+                    author.getContactInfo() != null ? author.getContactInfo(): "No contact info");
         }
     }
 }
