@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  catalog-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: catalog-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks:
+      - catalog-network
+  mysql:
+    image: mysql:8.0
+    container_name: catalog-db
+    environment:
+      MYSQL_DATABASE: catalog
+      MYSQL_USER: luis.gf
+      MYSQL_ROOT_PASSWORD: provisional
+      MYSQL_PASSWORD: provisional
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - catalog-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "luis.gf", "-pprovisional"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  catalog-network:
+    driver: bridge

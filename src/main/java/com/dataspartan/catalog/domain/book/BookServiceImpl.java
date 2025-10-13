@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dataspartan.catalog.exception.InvalidArgumentsException;
+import com.dataspartan.catalog.exception.PreconditionFailedException;
 import com.dataspartan.catalog.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book getBookById(@NonNull Long id) {
         log.info("Fetching book with ID: {}", id);
-        Book book = bookRepository.findById(id);
+        Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
             log.warn("Book not found with ID: {}", id);
             throw new ResourceNotFoundException("Book not found with id: " + id);
@@ -52,13 +53,15 @@ public class BookServiceImpl implements BookService {
     public Book updateBook(@NonNull Long id, @NonNull Book book) {
         log.info("Updating book with ID: {}", id);
         logBookDetails("Update request details", book);
-        Book existingBook = bookRepository.findById(id);
-        if (existingBook == null) {
+
+        if (!bookRepository.existsById(id)) {
             log.warn("Cannot update - Book not found with ID: {}", id);
             throw new ResourceNotFoundException("Book not found with id: " + id);
         }
+
         validateBook(book);
-        Book updatedBook = bookRepository.update(id, book);
+        book.setId(id);
+        Book updatedBook = bookRepository.save(book);
         log.info("Book updated successfully with ID: {}", id);
         logBookDetails("Updated book details", updatedBook);
         return updatedBook;
@@ -67,17 +70,19 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBook(@NonNull Long id) {
         log.info("Deleting book with ID: {}", id);
-        Book existingBook = bookRepository.findById(id);
+        Book existingBook = bookRepository.findById(id).orElse(null);
         if (existingBook == null) {
             log.warn("Cannot delete - Book not found with ID: {}", id);
             throw new ResourceNotFoundException("Book not found with id: " + id);
         }
-        boolean deleted = bookRepository.deleteById(id);
-        if (!deleted) {
-            log.error("Failed to delete book with ID: {}", id);
-            throw new RuntimeException("Failed to delete book with id: " + id);
+
+        try {
+            bookRepository.deleteById(id);
+            log.info("Book deleted successfully with ID: {}", id);
+        } catch (Exception e) {
+            log.error("Failed to delete book with ID: {}", id, e);
+            throw new PreconditionFailedException("Failed to delete book with id: " + id);
         }
-        log.info("Book deleted successfully with ID: {}", id);
     }
 
     @Override
@@ -99,8 +104,8 @@ public class BookServiceImpl implements BookService {
         }
 
         book.getEditions().add(edition);
-        bookRepository.update(bookId, book);
-        log.info("Successfully added edition at index {} to book: {}", bookId);
+        bookRepository.save(book);
+        log.info("Successfully added edition to book: {}", bookId);
         return edition;
     }
 
@@ -121,7 +126,7 @@ public class BookServiceImpl implements BookService {
         }
 
         book.getEditions().set(editionIndex, edition);
-        bookRepository.update(bookId, book);
+        bookRepository.save(book);
         log.info("Successfully updated edition at index: {}", editionIndex);
         return edition;
     }
@@ -143,7 +148,7 @@ public class BookServiceImpl implements BookService {
         }
 
         book.getEditions().remove(editionIndex);
-        bookRepository.update(bookId, book);
+        bookRepository.save(book);
         log.info("Successfully deleted edition at index: {}", editionIndex);
     }
 

@@ -1,12 +1,9 @@
 package com.dataspartan.catalog.domain.author;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AuthorRepository {
-    
-    List<Author> findAll();
-    Author findById(Long id);
-    Author save(Author author);
-    Author update(Long id, Author author);
-    boolean deleteById(Long id);
+@Repository
+public interface AuthorRepository extends JpaRepository<Author, Long> {
+    // JpaRepository ya provee: findAll(), findById(), save(), deleteById()
 }
