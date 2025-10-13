@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dataspartan.catalog.domain.author.Author;
 import com.dataspartan.catalog.domain.author.AuthorService;
+import com.dataspartan.catalog.domain.author.ContactInfo;
 import com.dataspartan.catalog.domain.facade.AuthorFacadeImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class AuthorController {
     private final AuthorService authorService;
     private final AuthorFacadeImpl authorFacade;
 
-    // Endpoints
+    // Author CRUD endpoints
     @GetMapping
     public List<Author> getAllAuthors() {
         log.info("GET /author - Retrieving all authors");
@@ -39,15 +40,14 @@ public class AuthorController {
     public Author getAuthorById(@PathVariable Long id) {
         log.info("GET /author/{} - Retrieving author by ID", id);
         Author author = authorService.getAuthorById(id);
-        log.debug("Retrieved author: name: {}, surname: {}", author.getName(), author.getSurname());
+        authorService.logAuthorDetails("Retrieved author", author);
         return author;
     }
 
     @PostMapping
     public Author createAuthor(@RequestBody Author author) {
         log.info("POST /author - Creating new author with name: {}", author.getName());
-        log.debug("Author creation request: surname: {}, birthYear: {}", 
-                 author.getSurname(), author.getBirthYear());
+        authorService.logAuthorDetails("Author creation request", author);
         Author createdAuthor = authorService.createAuthor(author);
         log.info("Successfully created author with ID: {}", createdAuthor.getId());
         return createdAuthor;
@@ -56,7 +56,7 @@ public class AuthorController {
     @PutMapping("/{id}")
     public Author updateAuthor(@PathVariable Long id, @RequestBody Author author) {
         log.info("PUT /author/{} - Updating author", id);
-        log.debug("Author update request: name: {}, surname: {}", author.getName(), author.getSurname());
+        authorService.logAuthorDetails("Author update request", author);
         Author updatedAuthor = authorService.updateAuthor(id, author);
         log.info("Successfully updated author with ID: {}", id);
         return updatedAuthor;
@@ -68,5 +68,35 @@ public class AuthorController {
         authorFacade.deleteAuthor(id);
         log.info("Successfully deleted author with ID: {}", id);
     }
-    
+
+    // ContactInfo CRUD endpoints
+    @PostMapping("/{authorId}/contact")
+    public ContactInfo addContactInfoToAuthor(@PathVariable Long authorId, @RequestBody ContactInfo contactInfo) {
+        log.info("POST /author/{}/contacts - Adding contact info to author", authorId);
+        return authorService.addContactInfoToAuthor(authorId, contactInfo);
+    }
+
+    @GetMapping("/{authorId}/contact")
+    public List<ContactInfo> getAllContactInfoFromAuthor(@PathVariable Long authorId) {
+        log.info("GET /author/{}/contacts - Retrieving all contact info from author", authorId);
+        return authorService.getAllContactInfoFromAuthor(authorId);
+    }
+
+    @GetMapping("/{authorId}/contact/{contactIndex}")
+    public ContactInfo getContactInfo(@PathVariable Long authorId, @PathVariable int contactIndex) {
+        log.info("GET /author/{}/contacts/{} - Retrieving contact info", authorId, contactIndex);
+        return authorService.getContactInfo(authorId, contactIndex);
+    }
+
+    @PutMapping("/{authorId}/contact/{contactIndex}")
+    public ContactInfo updateContactInfo(@PathVariable Long authorId, @PathVariable int contactIndex, @RequestBody ContactInfo contactInfo) {
+        log.info("PUT /author/{}/contacts/{} - Updating contact info", authorId, contactIndex);
+        return authorService.updateContactInfo(authorId, contactIndex, contactInfo);
+    }
+
+    @DeleteMapping("/{authorId}/contact/{contactIndex}")
+    public void deleteContactInfo(@PathVariable Long authorId, @PathVariable int contactIndex) {
+        log.info("DELETE /author/{}/contacts/{} - Deleting contact info", authorId, contactIndex);
+        authorService.deleteContactInfo(authorId, contactIndex);
+    }
 }

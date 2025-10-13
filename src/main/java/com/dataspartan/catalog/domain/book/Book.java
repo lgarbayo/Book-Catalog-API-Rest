@@ -1,8 +1,10 @@
-// forma parte de la logica de negocio
-
 package com.dataspartan.catalog.domain.book;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +15,13 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
-    //id, title, author ids list, publisher, edition, published date
     private Long id;
     @NonNull private String title;
     @NonNull private List<Long> authorIds;
-    private String publisher;
-    private String edition;
-    private String publishedDate;
+    private Integer publicationYear; // fecha de publicación original del libro
+
+    private Map<Long, String> authorPseudonyms = new HashMap<>();
+
+    // lista de ediciones del libro
+    private List<Edition> editions = new ArrayList<>();
 }
