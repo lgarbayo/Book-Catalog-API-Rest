@@ -46,5 +46,6 @@ public class Author {
     @ElementCollection
     @CollectionTable(name = "author_contact_info", joinColumns = @JoinColumn(name = "author_id"))
     @Column(name = "contact_info")
+    @Embedded
     private List<ContactInfo> contactInfo = new ArrayList<>();
 }
