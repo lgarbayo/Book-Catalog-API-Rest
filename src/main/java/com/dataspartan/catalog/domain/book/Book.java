@@ -44,6 +44,5 @@ public class Book {
     // lista de ediciones del libro
     @ElementCollection
     @CollectionTable(name = "book_editions", joinColumns = @JoinColumn(name = "book_id"))
-    @Embedded
     private List<Edition> editions = new ArrayList<>();
 }
