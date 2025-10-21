@@ -26,8 +26,8 @@ public class JpaAuthorRepositoryAdapter implements AuthorRepository {
     }
 
     @Override
-    public Author findById(Long id) {
-        return jpaRepository.findById(id).map(mapper::toDomain).orElse(null);
+    public Optional<Author> findById(Long id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
     }
 
     @Override
