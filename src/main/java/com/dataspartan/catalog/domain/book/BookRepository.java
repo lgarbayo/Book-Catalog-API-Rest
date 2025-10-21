@@ -3,7 +3,6 @@ package com.dataspartan.catalog.domain.book;
 import java.util.List;
 
 public interface BookRepository {
-
     List<Book> findAll();
     Book findById(Long id);
     Book save(Book book);

@@ -1,4 +1,4 @@
-package com.dataspartan.catalog.controller;
+package com.dataspartan.catalog.adapter.controller;
 
 import java.util.List;
 

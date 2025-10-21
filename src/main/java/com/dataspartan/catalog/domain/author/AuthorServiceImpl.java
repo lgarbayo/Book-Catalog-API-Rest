@@ -28,7 +28,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Author getAuthorById(@NonNull Long id) {
         log.debug("Fetching author with ID: {}", id);
-        Author author = authorRepository.findById(id);
+        Author author = authorRepository.findById(id).orElse(null);
         if (author == null) {
             log.warn("Author not found with ID: {}", id);
             throw new ResourceNotFoundException("Author not found with id: " + id);
@@ -58,15 +58,16 @@ public class AuthorServiceImpl implements AuthorService {
         logAuthorDetails("Update request details", author);
 
         // Verificar que el autor existe
-        Author existingAuthor = authorRepository.findById(id);
-        if (existingAuthor == null) {
+        if (!authorRepository.existsById(id)) {
             log.warn("Attempt to update non-existent author with ID: {}", id);
             throw new ResourceNotFoundException("Author not found with id: " + id);
         }
 
         validateAuthor(author);
 
-        Author updatedAuthor = authorRepository.update(id, author);
+        // Asegurar que mantiene el ID correcto
+        author.setId(id);
+        Author updatedAuthor = authorRepository.save(author);
         log.info("Successfully updated author with ID: {}", id);
         logAuthorDetails("Updated author details", updatedAuthor);
 
@@ -78,7 +79,7 @@ public class AuthorServiceImpl implements AuthorService {
         log.info("Attempting to delete author with ID: {}", id);
         
         // Verificar que el autor existe
-        Author existingAuthor = authorRepository.findById(id);
+        Author existingAuthor = authorRepository.findById(id).orElse(null);
         if (existingAuthor == null) {
             log.warn("Attempt to delete non-existent author with ID: {}", id);
             throw new ResourceNotFoundException("Author not found with id: " + id);
@@ -88,14 +89,13 @@ public class AuthorServiceImpl implements AuthorService {
                  existingAuthor.getName(),
                  existingAuthor.getSurname() != null ? existingAuthor.getSurname() : "No surname");
 
-        boolean deleted = authorRepository.deleteById(id);
-
-        if (!deleted) {
-            log.error("Failed to delete author with ID: {}", id);
+        try {
+            authorRepository.deleteById(id);
+            log.info("Successfully deleted author with ID: {}", id);
+        } catch (Exception e) {
+            log.error("Failed to delete author with ID: {}", id, e);
             throw new PreconditionFailedException("Failed to delete author with id: " + id);
         }
-
-        log.info("Successfully deleted author with ID: {}", id);
     }
 
     // CRUD operations for nested ContactInfo elements
@@ -109,7 +109,7 @@ public class AuthorServiceImpl implements AuthorService {
         }
 
         author.getContactInfo().add(contactInfo);
-        authorRepository.update(authorId, author);
+        authorRepository.save(author);
         log.info("Successfully added contact info to author: {}", authorId);
         return contactInfo;
     }
@@ -133,7 +133,7 @@ public class AuthorServiceImpl implements AuthorService {
         }
 
         author.getContactInfo().set(contactIndex, contactInfo);
-        authorRepository.update(authorId, author);
+        authorRepository.save(author);
         log.info("Successfully updated contact info at index: {}", contactIndex);
         return contactInfo;
     }
@@ -157,7 +157,7 @@ public class AuthorServiceImpl implements AuthorService {
         }
 
         author.getContactInfo().remove(contactIndex);
-        authorRepository.update(authorId, author);
+        authorRepository.save(author);
         log.info("Successfully deleted contact info at index: {}", contactIndex);
     }
 
@@ -217,7 +217,7 @@ public class AuthorServiceImpl implements AuthorService {
     public void logAuthorDetails(String prefix, Author author) {
         if (log.isDebugEnabled()) {
             log.debug("{}: name: {}, surname: {}, nationality: {}, birthDate: {}, deathDate: {}, biography: {}, pseudonyms: {}, contactInfo: {}",
-                    prefix, // Texto del log
+                    prefix,
                     author.getName(),
                     author.getSurname() != null ? author.getSurname() : "No surname",
                     author.getNationality() != null ? author.getNationality() : "Unknown nationality",

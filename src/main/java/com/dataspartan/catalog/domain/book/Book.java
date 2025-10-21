@@ -1,6 +1,5 @@
 package com.dataspartan.catalog.domain.book;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -17,9 +16,8 @@ import lombok.NonNull;
 public class Book {
     private Long id;
     @NonNull private String title;
-    @NonNull private List<Long> authorIds;
+    @NonNull private List<Long> authorIds = new ArrayList<>();
     private Integer publicationYear; // fecha de publicación original del libro
-
     private Map<Long, String> authorPseudonyms = new HashMap<>();
 
     // lista de ediciones del libro
