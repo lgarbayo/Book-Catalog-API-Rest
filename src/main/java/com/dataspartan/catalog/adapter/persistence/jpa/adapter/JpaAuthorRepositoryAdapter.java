@@ -8,6 +8,7 @@ import com.dataspartan.catalog.adapter.persistence.mapper.AuthorMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class JpaAuthorRepositoryAdapter implements AuthorRepository {
