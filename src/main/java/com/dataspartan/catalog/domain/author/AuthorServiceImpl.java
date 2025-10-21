@@ -58,7 +58,8 @@ public class AuthorServiceImpl implements AuthorService {
         logAuthorDetails("Update request details", author);
 
         // Verificar que el autor existe
-        if (!authorRepository.existsById(id)) {
+        Author existingAuthor = authorRepository.findById(id).orElse(null);
+        if (existingAuthor == null) {
             log.warn("Attempt to update non-existent author with ID: {}", id);
             throw new ResourceNotFoundException("Author not found with id: " + id);
         }
