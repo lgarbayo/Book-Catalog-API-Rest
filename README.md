@@ -35,23 +35,25 @@
 
   ## 🗂️ Estructura del proyecto
 
-  src/main/java/com/dataspartan/catalog
-  ├── CatalogApplication.java
-  ├── adapter
-  │   ├── controller
-  │   │   ├── AuthorController.java
-  │   │   └── BookController.java
-  │   └── persistence
-  │       ├── entity
-  │       ├── jpa
-  │       │   └── adapter / repository
-  │       └── mapper
-  ├── domain
-  │   ├── author / book / facade
-  │   └── exception
-  └── resources
-      └── application.properties
-
+  ```mermaid
+  graph TD
+    A[src/main/java/com/dataspartan/catalog]
+    A --> B[CatalogApplication.java]
+    A --> C[adapter]
+    C --> C1[controller]
+    C1 --> C11[AuthorController.java]
+    C1 --> C12[BookController.java]
+    C --> C2[persistence]
+    C2 --> C21[entity]
+    C2 --> C22[jpa]
+    C22 --> C23[adapter / repository]
+    C2 --> C24[mapper]
+    A --> D[domain]
+    D --> D1[author / book / facade]
+    D --> D2[exception]
+    A --> E[resources]
+    E --> E1[application.properties]
+  ```
   ———
 
   ## ⚙️ Requisitos previos
