@@ -34,7 +34,7 @@
   - Adapters: adapter.controller para la capa REST y adapter.persistence para JPA.
   - Domain: servicios (AuthorService, BookService), facades y modelos.
   - Infrastructure: entidades JPA y mappers para aislar la persistencia.
-
+  ```
   ———
 
   ## 🗂️ Estructura del proyecto
