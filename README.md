@@ -31,7 +31,7 @@
     Repositories --> Adapters[Adapters / JPA]
     Adapters --> DB[(MySQL 8)]
   ```
-  ———
+  ---
 
   ## 🗂️ Estructura del proyecto
 
