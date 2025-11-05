@@ -24,16 +24,12 @@
 
   ```mermaid
   graph TD
-      Client[Cliente REST] -->|HTTP| Controllers[Adapters / Controller]
-      Controllers --> Services[Domain Services]
-      Services --> Facade[AuthorFacade]
-      Services --> Repositories[Ports / Repository]
-      Repositories --> Adapters[Adapters / JPA]
-      Adapters --> DB["MySQL 8"]
-  
-  - Adapters: adapter.controller para la capa REST y adapter.persistence para JPA.
-  - Domain: servicios (AuthorService, BookService), facades y modelos.
-  - Infrastructure: entidades JPA y mappers para aislar la persistencia.
+    Client[Cliente REST] -->|HTTP| Controllers[Adapters / Controller]
+    Controllers --> Services[Domain Services]
+    Services --> Facade[AuthorFacade]
+    Services --> Repositories[Ports / Repository]
+    Repositories --> Adapters[Adapters / JPA]
+    Adapters --> DB[(MySQL 8)]
   ```
   ———
 
