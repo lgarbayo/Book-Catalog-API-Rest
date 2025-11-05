@@ -79,7 +79,7 @@
   docker compose up --build
 
   - API: http://localhost:8080
-  - MySQL: localhost:3306 (usuario luis.gf, contraseña provisional)
+  - MySQL: localhost:3306 (usuario y contraseña)
 
   ———
 
@@ -169,36 +169,10 @@
 
   ———
 
-  ## 🧪 Tests
-
-  ./mvnw test
-
-  Incluye pruebas de arranque (CatalogApplicationTests) y se recomienda extenderlas con tests de servicios y controladores a medida que crezca la lógica.
-
-  ———
-
-  ## 📦 Despliegue
-
-  - Artefacto: target/catalog-0.0.1-SNAPSHOT.jar
-  - Dockerfile: imagen ligera sobre eclipse-temurin:21-jre ejecutando el JAR empaquetado.
-  - Integra fácilmente con plataformas como Render, Railway o AWS ECS (solo requiere las variables de conexión a MySQL).
-
-  ———
-
-  ## 🛣️ Roadmap sugerido
-
-  - [ ] Añadir autenticación (JWT) para proteger la API.
-  - [ ] Documentar endpoints con Springdoc / OpenAPI.
-  - [ ] Crear pruebas de integración para validar reglas de negocio clave.
-  - [ ] Incluir búsqueda avanzada (por pseudónimo, rango de años, idioma).
-  - [ ] Publicar imagen Docker en GitHub Container Registry.
-
-  ———
-
   ## 🙌 Contribuciones
 
   1. Haz un fork del repositorio.
-  2. Crea una rama feature: git checkout -b feature/nueva-funcionalidad.
+  2. Crea una rama feature: git checkout -b feature/nueva-funcionalidad que cuelgue de la rama develop.
   3. Asegúrate de pasar los tests y respeta el estilo del proyecto.
   4. Envía un pull request explicando claramente el cambio.
 
