@@ -54,7 +54,7 @@
     A --> E[resources]
     E --> E1[application.properties]
   ```
-  ———
+  ---
 
   ## ⚙️ Requisitos previos
 
@@ -63,7 +63,7 @@
   - MySQL 8.0 (o Docker para usar el docker-compose incluido).
   - Docker 24+ y Docker Compose v2 (opcional para despliegue en contenedores).
 
-  ———
+  ---
 
   ## 🚀 Puesta en marcha
 
@@ -81,7 +81,7 @@
   - API: http://localhost:8080
   - MySQL: localhost:3306 (usuario y contraseña)
 
-  ———
+  ---
 
   ## ⚙️ Configuración
 
@@ -96,7 +96,7 @@
 
   Ajusta credenciales o perfiles mediante variables de entorno SPRING_DATASOURCE_* y SPRING_PROFILES_ACTIVE.
 
-  ———
+  ---
 
   ## 📡 API REST
 
@@ -158,7 +158,7 @@
     "timestamp": "2025-02-05T22:15:34.123"
   }
 
-  ———
+  ---
 
   ## ✅ Reglas de negocio destacadas
 
@@ -167,7 +167,7 @@
   - Validación de ISBN (10/13 dígitos), copias totales vs vendidas y páginas > 0.
   - Contactos y ediciones se gestionan como colecciones embebidas (element collections) en JPA.
 
-  ———
+  ---
 
   ## 🙌 Contribuciones
 
@@ -176,4 +176,3 @@
   3. Asegúrate de pasar los tests y respeta el estilo del proyecto.
   4. Envía un pull request explicando claramente el cambio.
 
-  ———
