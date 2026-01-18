@@ -1,4 +1,4 @@
-# 📚 Book Catalog API
+# Book Catalog API
 
   [![Java](https://img.shields.io/badge/Java-21-ff8c00.svg)](https://adoptium.net/)
   [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-6db33f.svg)](https://spring.io/projects/spring-boot)
@@ -10,7 +10,7 @@
 
   ---
 
-  ## ✨ Características clave
+  ## Características clave
 
   - **Dominio rico**: modelos `Author`, `Book`, `Edition` y `ContactInfo` con reglas de validación expresivas.
   - **Arquitectura hexagonal ligera**: controladores REST → servicios de dominio → adaptadores JPA, todo desacoplado mediante interfaces.
@@ -20,7 +20,7 @@
 
   ---
 
-  ## 🧱 Arquitectura
+  ## Arquitectura
 
   ```mermaid
   graph TD
@@ -33,7 +33,7 @@
   ```
   ---
 
-  ## 🗂️ Estructura del proyecto
+  ## Estructura del proyecto
 
   ```mermaid
   graph TD
@@ -56,7 +56,7 @@
   ```
   ---
 
-  ## ⚙️ Requisitos previos
+  ## Requisitos previos
 
   - Java 21 (Temurin recomendado).
   - Maven 3.9+ o el wrapper ./mvnw.
@@ -65,7 +65,7 @@
 
   ---
 
-  ## 🚀 Puesta en marcha
+  ## Puesta en marcha
 
   ### Opción 1 · Local con Maven
 
@@ -83,7 +83,7 @@
 
   ---
 
-  ## ⚙️ Configuración
+  ## Configuración
 
   Parámetros por defecto (src/main/resources/application.properties):
 
@@ -98,7 +98,7 @@
 
   ---
 
-  ## 📡 API REST
+  ## API REST
 
   | Método | Endpoint                         | Descripción                                  |
   |--------|----------------------------------|----------------------------------------------|
@@ -160,7 +160,7 @@
 
   ---
 
-  ## ✅ Reglas de negocio destacadas
+  ## Reglas de negocio destacadas
 
   - Un autor no puede eliminarse si existen libros que lo referencian (AuthorFacadeImpl).
   - Fechas futuras o inconsistentes (nacimiento > fallecimiento, publicación futura, etc.) disparan InvalidArgumentsException.
@@ -169,7 +169,7 @@
 
   ---
 
-  ## 🙌 Contribuciones
+  ## Contribuciones
 
   1. Haz un fork del repositorio.
   2. Crea una rama feature: git checkout -b feature/nueva-funcionalidad que cuelgue de la rama develop.
